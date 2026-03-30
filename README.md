@@ -129,4 +129,4 @@ import './modules/mymodule/MyModule'
 
 ## 📄 开源协议
 
-本项目基于 [MIT License](./LICENSE) 开源。
+本项目基于Apache License 2.0开源。
