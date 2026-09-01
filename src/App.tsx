@@ -15,13 +15,18 @@ import './modules/todo/TodoModule';
 import './modules/diary/DiaryModule';
 import './modules/mood/MoodModule';
 import './modules/health/HealthModule';
+import './modules/accounting/AccountingModule';
 
 const App: React.FC = () => {
-  const { isUnlocked, isSetup, setIsSetup } = useAppStore();
+  const { isUnlocked, isSetup, setIsSetup, setUnlocked } = useAppStore();
 
   useEffect(() => {
     setIsSetup(AuthService.isSetup());
-  }, [setIsSetup]);
+    // Trusted devices skip the lock screen until the trust expires
+    AuthService.tryRestoreSession().then((restored) => {
+      if (restored) setUnlocked(true);
+    });
+  }, [setIsSetup, setUnlocked]);
 
   // Show lock screen if not unlocked
   if (!isUnlocked) {

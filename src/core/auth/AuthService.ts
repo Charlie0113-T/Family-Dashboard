@@ -5,9 +5,18 @@ import { EncryptionService } from '../encryption/EncryptionService';
 import { DataService } from '../data/DataService';
 
 const AUTH_MODULE_ID = '__auth';
+const TRUST_MODULE_ID = '__trust';
+
+/** How long a "remember this device" unlock stays valid */
+export const TRUST_DURATION_DAYS = 7;
 
 interface AuthState {
   passwordHash: string;
+}
+
+interface TrustState {
+  key: JsonWebKey;
+  expiresAt: number;
 }
 
 let unlocked = false;
@@ -48,10 +57,41 @@ export const AuthService = {
     return true;
   },
 
-  /** Lock the dashboard */
+  /** Remember this device so it can unlock without the password for a while */
+  async trustDevice(days: number = TRUST_DURATION_DAYS): Promise<void> {
+    const key = await EncryptionService.exportKey();
+    if (!key) return;
+    DataService.set<TrustState>(TRUST_MODULE_ID, {
+      key,
+      expiresAt: Date.now() + days * 24 * 60 * 60 * 1000,
+    });
+  },
+
+  /** Unlock without a password if this device holds a valid trust record */
+  async tryRestoreSession(): Promise<boolean> {
+    const trust = DataService.get<TrustState>(TRUST_MODULE_ID);
+    if (!trust) return false;
+
+    if (!trust.key || Date.now() > trust.expiresAt) {
+      DataService.remove(TRUST_MODULE_ID);
+      return false;
+    }
+
+    const restored = await EncryptionService.initFromJwk(trust.key);
+    if (!restored) {
+      DataService.remove(TRUST_MODULE_ID);
+      return false;
+    }
+
+    unlocked = true;
+    return true;
+  },
+
+  /** Lock the dashboard and revoke this device's password-free unlock */
   lock(): void {
     unlocked = false;
     EncryptionService.clear();
+    DataService.remove(TRUST_MODULE_ID);
   },
 
   /** Check if currently unlocked */

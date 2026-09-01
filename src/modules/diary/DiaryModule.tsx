@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { DataService } from '../../core/data/DataService';
 import { ModuleRegistry } from '../../module-system/ModuleRegistry';
+import { toDateKey } from '../../utils/helpers';
 
 // --- Types ---
 
@@ -17,10 +18,6 @@ const MODULE_ID = 'diary';
 
 // --- Helpers ---
 
-function formatDate(date: Date): string {
-  return date.toISOString().split('T')[0];
-}
-
 function displayDate(dateStr: string): string {
   const date = new Date(dateStr + 'T00:00:00');
   return date.toLocaleDateString('en-US', {
@@ -34,25 +31,32 @@ function displayDate(dateStr: string): string {
 // --- Component ---
 
 const DiaryModule: React.FC = () => {
-  const [currentDate, setCurrentDate] = useState(formatDate(new Date()));
+  const [currentDate, setCurrentDate] = useState(toDateKey());
   const [content, setContent] = useState('');
   const [store, setStore] = useState<DiaryStore>({ entries: {} });
   const [saved, setSaved] = useState(false);
 
-  // Load all entries on mount
+  // Load all entries on mount (decrypted; plaintext records from older
+  // versions are readable too and get re-encrypted on the spot)
   useEffect(() => {
-    const stored = DataService.get<DiaryStore>(MODULE_ID);
-    if (stored) {
+    let cancelled = false;
+    DataService.getSecure<DiaryStore>(MODULE_ID).then((stored) => {
+      if (cancelled || !stored) return;
       setStore(stored);
-    }
+      setContent(stored.entries[toDateKey()]?.content || '');
+      void DataService.setSecure(MODULE_ID, stored);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  // Load content when date changes
-  useEffect(() => {
-    const entry = store.entries[currentDate];
-    setContent(entry?.content || '');
+  /** Move the view to a date and show that day's entry */
+  const showDate = (dateKey: string) => {
+    setCurrentDate(dateKey);
+    setContent(store.entries[dateKey]?.content || '');
     setSaved(false);
-  }, [currentDate, store]);
+  };
 
   const saveEntry = () => {
     const updated: DiaryStore = {
@@ -62,7 +66,7 @@ const DiaryModule: React.FC = () => {
       },
     };
     setStore(updated);
-    DataService.set(MODULE_ID, updated);
+    void DataService.setSecure(MODULE_ID, updated);
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   };
@@ -70,20 +74,19 @@ const DiaryModule: React.FC = () => {
   const goToPrevDay = () => {
     const date = new Date(currentDate + 'T00:00:00');
     date.setDate(date.getDate() - 1);
-    setCurrentDate(formatDate(date));
+    showDate(toDateKey(date));
   };
 
   const goToNextDay = () => {
     const date = new Date(currentDate + 'T00:00:00');
     date.setDate(date.getDate() + 1);
-    const today = formatDate(new Date());
-    const next = formatDate(date);
-    if (next <= today) {
-      setCurrentDate(next);
+    const next = toDateKey(date);
+    if (next <= toDateKey()) {
+      showDate(next);
     }
   };
 
-  const isToday = currentDate === formatDate(new Date());
+  const isToday = currentDate === toDateKey();
   const entryCount = Object.keys(store.entries).filter(
     (k) => store.entries[k].content.trim().length > 0
   ).length;

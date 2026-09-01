@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DataService } from '../../core/data/DataService';
 import { ModuleRegistry } from '../../module-system/ModuleRegistry';
+import { toDateKey } from '../../utils/helpers';
 
 interface MoodEntry {
   date: string;
@@ -18,27 +19,18 @@ const MOODS = [
   { emoji: '☹', label: 'Bad' },
 ];
 
-function todayKey(): string {
-  return new Date().toISOString().split('T')[0];
-}
-
 const MoodModule: React.FC = () => {
-  const [entries, setEntries] = useState<MoodEntry[]>([]);
-  const [todayMood, setTodayMood] = useState<MoodEntry | null>(null);
-
-  useEffect(() => {
-    const stored = DataService.get<MoodEntry[]>(MODULE_ID);
-    if (stored) {
-      setEntries(stored);
-      const today = stored.find((e) => e.date === todayKey());
-      if (today) setTodayMood(today);
-    }
-  }, []);
+  const [entries, setEntries] = useState<MoodEntry[]>(
+    () => DataService.get<MoodEntry[]>(MODULE_ID) ?? []
+  );
+  const [todayMood, setTodayMood] = useState<MoodEntry | null>(
+    () => entries.find((e) => e.date === toDateKey()) ?? null
+  );
 
   const selectMood = (mood: string, label: string) => {
-    const entry: MoodEntry = { date: todayKey(), mood, label };
+    const entry: MoodEntry = { date: toDateKey(), mood, label };
     setTodayMood(entry);
-    const updated = [entry, ...entries.filter((e) => e.date !== todayKey())];
+    const updated = [entry, ...entries.filter((e) => e.date !== toDateKey())];
     setEntries(updated);
     DataService.set(MODULE_ID, updated);
   };

@@ -17,14 +17,10 @@ const MODULE_ID = 'todo';
 // --- Component ---
 
 const TodoModule: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<Todo[]>(
+    () => DataService.get<Todo[]>(MODULE_ID) ?? []
+  );
   const [input, setInput] = useState('');
-
-  // Load todos from storage on mount
-  useEffect(() => {
-    const stored = DataService.get<Todo[]>(MODULE_ID);
-    if (stored) setTodos(stored);
-  }, []);
 
   // Persist todos whenever they change
   useEffect(() => {
