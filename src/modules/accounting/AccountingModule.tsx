@@ -41,9 +41,7 @@ function defaultDateForMonth(month: string): string {
 // --- Component ---
 
 const AccountingModule: React.FC = () => {
-  const [entries, setEntries] = useState<AccountingEntry[]>(
-    () => DataService.get<AccountingEntry[]>(MODULE_ID) ?? []
-  );
+  const [entries, setEntries] = useState<AccountingEntry[]>([]);
   const [month, setMonth] = useState(toMonthKey());
 
   // Entry form
@@ -59,9 +57,21 @@ const AccountingModule: React.FC = () => {
   const lastAddedRef = useRef<string | null>(null);
   const touchStartRef = useRef<{ x: number; y: number } | null>(null);
 
+  // Load entries on mount (decrypted; plaintext records from older
+  // versions are readable too and get re-encrypted on the next save)
+  useEffect(() => {
+    let cancelled = false;
+    DataService.getSecure<AccountingEntry[]>(MODULE_ID).then((stored) => {
+      if (!cancelled && stored) setEntries(stored);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const persist = (next: AccountingEntry[]) => {
     setEntries(next);
-    DataService.set(MODULE_ID, next);
+    void DataService.setSecure(MODULE_ID, next);
   };
 
   // Navigating months always moves the entry form's date along with the view,
@@ -369,7 +379,7 @@ ModuleRegistry.register({
   name: 'Accounting',
   icon: '$',
   description: 'Monthly income & expense tracker',
-  encrypted: false,
+  encrypted: true,
   Component: AccountingModule,
 });
 

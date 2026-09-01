@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { DataService } from '../../core/data/DataService';
 import { ModuleRegistry } from '../../module-system/ModuleRegistry';
+import { toDateKey } from '../../utils/helpers';
 
 interface HealthEntry {
   date: string;
@@ -11,33 +12,24 @@ interface HealthEntry {
 
 const MODULE_ID = 'health';
 
-function todayKey(): string {
-  return new Date().toISOString().split('T')[0];
-}
-
 const HealthModule: React.FC = () => {
-  const [entries, setEntries] = useState<Record<string, HealthEntry>>({});
-  const [today, setToday] = useState<HealthEntry>({
-    date: todayKey(),
-    water: 0,
-    sleep: 0,
-    steps: 0,
-  });
-
-  useEffect(() => {
-    const stored = DataService.get<Record<string, HealthEntry>>(MODULE_ID);
-    if (stored) {
-      setEntries(stored);
-      if (stored[todayKey()]) {
-        setToday(stored[todayKey()]);
+  const [entries, setEntries] = useState<Record<string, HealthEntry>>(
+    () => DataService.get<Record<string, HealthEntry>>(MODULE_ID) ?? {}
+  );
+  const [today, setToday] = useState<HealthEntry>(
+    () =>
+      entries[toDateKey()] ?? {
+        date: toDateKey(),
+        water: 0,
+        sleep: 0,
+        steps: 0,
       }
-    }
-  }, []);
+  );
 
   const updateToday = (field: keyof Omit<HealthEntry, 'date'>, value: number) => {
     const updated = { ...today, [field]: value };
     setToday(updated);
-    const allEntries = { ...entries, [todayKey()]: updated };
+    const allEntries = { ...entries, [toDateKey()]: updated };
     setEntries(allEntries);
     DataService.set(MODULE_ID, allEntries);
   };
@@ -46,7 +38,7 @@ const HealthModule: React.FC = () => {
     <div className="module-container">
       <div className="module-header">
         <h2>Health</h2>
-        <span className="muted">{todayKey()}</span>
+        <span className="muted">{toDateKey()}</span>
       </div>
 
       <div className="health-grid">
