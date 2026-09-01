@@ -20,11 +20,12 @@ async function deriveKey(password: string): Promise<CryptoKey> {
 
   const salt = encoder.encode('family-dashboard-salt-v1');
 
+  // extractable, so the key can be exported for trusted-device unlock
   return crypto.subtle.deriveKey(
     { name: 'PBKDF2', salt, iterations: ITERATIONS, hash: 'SHA-256' },
     keyMaterial,
     { name: ALGO, length: KEY_LENGTH },
-    false,
+    true,
     ['encrypt', 'decrypt']
   );
 }
@@ -69,6 +70,29 @@ export const EncryptionService = {
     );
 
     return new TextDecoder().decode(decrypted);
+  },
+
+  /** Export the cached key so it can be stored for trusted-device unlock */
+  async exportKey(): Promise<JsonWebKey | null> {
+    if (!cachedKey) return null;
+    return crypto.subtle.exportKey('jwk', cachedKey);
+  },
+
+  /** Restore the cached key from a previously exported JWK */
+  async initFromJwk(jwk: JsonWebKey): Promise<boolean> {
+    try {
+      cachedKey = await crypto.subtle.importKey(
+        'jwk',
+        jwk,
+        { name: ALGO },
+        true,
+        ['encrypt', 'decrypt']
+      );
+      return true;
+    } catch {
+      cachedKey = null;
+      return false;
+    }
   },
 
   /** Check if encryption has been initialized */

@@ -95,6 +95,10 @@ h3 {
 /* --- Dashboard --- */
 .dashboard-header {
     margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
 }
 
 .dashboard-header h1 {
@@ -246,6 +250,7 @@ h3 {
     outline: none;
     transition: var(--transition);
     width: 100%;
+    color-scheme: dark;
 }
 
 .input:focus {
@@ -597,6 +602,194 @@ textarea.input {
 .lock-error {
     color: #aa4444;
     font-size: 0.85rem;
+}
+
+.lock-remember {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    cursor: pointer;
+    user-select: none;
+}
+
+.lock-remember input {
+    accent-color: var(--color-text);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+/* --- Accounting Module --- */
+.acct-month {
+    background: none;
+    border: none;
+    color: var(--color-text);
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    min-width: 180px;
+    text-align: center;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.acct-month:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.acct-month:disabled {
+    cursor: default;
+}
+
+.acct-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-radius: var(--radius-lg);
+}
+
+.acct-form-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.acct-form-row .input {
+    flex: 1;
+    min-width: 0;
+}
+
+.type-toggle {
+    display: flex;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.type-toggle button {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    font-family: inherit;
+    font-size: 0.85rem;
+    padding: 0.55rem 0.9rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.type-toggle button.active {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--color-text);
+}
+
+.acct-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.acct-sum-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.acct-sum-label {
+    font-size: 0.7rem;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.acct-sum-value {
+    font-size: 1.05rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.pos {
+    color: #7dab7d;
+}
+
+.neg {
+    color: #aa4444;
+}
+
+.acct-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.acct-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.acct-item:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.acct-item-date {
+    font-variant-numeric: tabular-nums;
+    min-width: 1.5rem;
+    text-align: right;
+}
+
+.acct-item-cat {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 0.1rem 0.5rem;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+}
+
+.acct-item-note {
+    flex: 1;
+    font-size: 0.9rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.acct-item-amount {
+    font-variant-numeric: tabular-nums;
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+}
+
+.acct-delete {
+    background: none;
+    border: none;
+    color: var(--color-muted);
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 0;
+    line-height: 1;
+    transition: var(--transition);
+}
+
+.acct-delete:hover {
+    color: var(--color-text);
 }
 
 /* --- Animations --- */
