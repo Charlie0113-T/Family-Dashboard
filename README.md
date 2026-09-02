@@ -1,4 +1,26 @@
-# Family Dashboard
+<p align="center">
+  <img src="public/logo.svg" width="96" height="96" alt="Family Dashboard Logo" />
+</p>
+
+<h1 align="center">Family Dashboard</h1>
+
+<p align="center">注重隐私、完全离线的家庭管理看板 — 无需服务器，数据只留在你自己的浏览器里。</p>
+
+<p align="center">
+  <a href="README.en.md"><b>English</b></a> ·
+  <span>简体中文</span>
+</p>
+
+<p align="center">
+  <img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-3B82F6.svg" />
+  <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB.svg?logo=react&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6.svg?logo=typescript&logoColor=white" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646CFF.svg?logo=vite&logoColor=white" />
+  <img alt="Local First" src="https://img.shields.io/badge/storage-100%25%20local-9333EA.svg" />
+  <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-F0468C.svg" />
+</p>
+
+---
 
 **Family Dashboard** 是一个注重隐私的家庭管理看板应用，完全运行在本地浏览器中，无需服务器。它提供主密码保护和可扩展的模块化架构，帮助家庭成员集中管理日常事务。
 
@@ -136,4 +158,4 @@ import './modules/mymodule/MyModule'
 
 ## 📄 开源协议
 
-本项目基于Apache License 2.0开源。
+本项目基于 Apache License 2.0 开源。
