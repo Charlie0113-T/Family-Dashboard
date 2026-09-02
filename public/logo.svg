@@ -1,14 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Family Dashboard logo">
   <defs>
-    <linearGradient id="fd-bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#9333EA"/>
-      <stop offset="1" stop-color="#4F7DFF"/>
-    </linearGradient>
+    <pattern id="fd-dots" width="4" height="4" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.55" fill="#ffffff" fill-opacity="0.16"/>
+    </pattern>
+    <filter id="fd-glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="1.6"/>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="16" fill="url(#fd-bg)"/>
-  <path d="M32 12 L51 29 H44.5 V49 H19.5 V29 H13 Z" fill="#FDFCFF"/>
-  <rect x="22.5" y="32.5" width="8" height="7" rx="2" fill="#7C3AED"/>
-  <rect x="33.5" y="32.5" width="8" height="7" rx="2" fill="#4F7DFF"/>
-  <rect x="22.5" y="41.5" width="8" height="6" rx="2" fill="#4F7DFF"/>
-  <path d="M37.5 47.2c-3.6-2.5-5.6-4.6-5.6-6.7 0-1.6 1.3-2.9 2.9-2.9 1 0 2 .5 2.7 1.4.7-.9 1.7-1.4 2.7-1.4 1.6 0 2.9 1.3 2.9 2.9 0 2.1-2 4.2-5.6 6.7z" fill="#F0468C"/>
+
+  <!-- black surface, matches the app's color-bg token -->
+  <rect width="64" height="64" rx="16" fill="#0a0a0a"/>
+  <!-- particle dot-grid, same pattern as the app's body background -->
+  <rect width="64" height="64" rx="16" fill="url(#fd-dots)"/>
+  <rect x="0.75" y="0.75" width="62.5" height="62.5" rx="15.25" fill="none" stroke="#242424" stroke-width="1.5"/>
+
+  <!-- ambient glowing particles -->
+  <circle cx="12" cy="14" r="2.1" fill="#ffffff" fill-opacity="0.35" filter="url(#fd-glow)"/>
+  <circle cx="53" cy="17" r="1.5" fill="#ffffff" fill-opacity="0.3" filter="url(#fd-glow)"/>
+  <circle cx="50" cy="50" r="2.3" fill="#ffffff" fill-opacity="0.28" filter="url(#fd-glow)"/>
+  <circle cx="14" cy="50" r="1.4" fill="#ffffff" fill-opacity="0.25" filter="url(#fd-glow)"/>
+
+  <!-- house, drawn as a constellation outline -->
+  <path d="M32 13 L50 28 H44.5 V47 H19.5 V28 H14 Z" fill="none" stroke="#f5f5f5" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="32" cy="13" r="1.8" fill="#f5f5f5"/>
+  <circle cx="50" cy="28" r="1.4" fill="#f5f5f5" fill-opacity="0.85"/>
+  <circle cx="14" cy="28" r="1.4" fill="#f5f5f5" fill-opacity="0.85"/>
+  <circle cx="44.5" cy="47" r="1.3" fill="#f5f5f5" fill-opacity="0.7"/>
+  <circle cx="19.5" cy="47" r="1.3" fill="#f5f5f5" fill-opacity="0.7"/>
+
+  <!-- heart accent -->
+  <path d="M32 41.5c-3.3-2.3-5.1-4.2-5.1-6.1 0-1.5 1.2-2.6 2.6-2.6.9 0 1.8.5 2.5 1.3.7-.8 1.6-1.3 2.5-1.3 1.4 0 2.6 1.1 2.6 2.6 0 1.9-1.8 3.8-5.1 6.1z" fill="#f5f5f5"/>
 </svg>

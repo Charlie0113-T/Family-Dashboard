@@ -12,12 +12,12 @@
 </p>
 
 <p align="center">
-  <img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-3B82F6.svg" />
-  <img alt="React" src="https://img.shields.io/badge/React-19-61DAFB.svg?logo=react&logoColor=white" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6.svg?logo=typescript&logoColor=white" />
-  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-646CFF.svg?logo=vite&logoColor=white" />
-  <img alt="Local First" src="https://img.shields.io/badge/storage-100%25%20local-9333EA.svg" />
-  <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-F0468C.svg" />
+  <img alt="License" src="https://img.shields.io/badge/license-Apache%202.0-000000.svg?style=flat-square&labelColor=0a0a0a" />
+  <img alt="React" src="https://img.shields.io/badge/React-19-000000.svg?style=flat-square&labelColor=0a0a0a&logo=react&logoColor=white" />
+  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-000000.svg?style=flat-square&labelColor=0a0a0a&logo=typescript&logoColor=white" />
+  <img alt="Vite" src="https://img.shields.io/badge/Vite-8-000000.svg?style=flat-square&labelColor=0a0a0a&logo=vite&logoColor=white" />
+  <img alt="Local First" src="https://img.shields.io/badge/storage-100%25%20local-000000.svg?style=flat-square&labelColor=0a0a0a" />
+  <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-000000.svg?style=flat-square&labelColor=0a0a0a" />
 </p>
 
 ---
